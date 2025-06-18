@@ -39,7 +39,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'Ahorros',
     'Prestamos',
-    'Usuarios',
     'rest_framework',
 ]
 
@@ -77,10 +76,18 @@ WSGI_APPLICATION = 'Cromu.wsgi.application'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+ #   'default': {
+ #       'ENGINE': 'django.db.backends.sqlite3',
+ #       'NAME': BASE_DIR / 'db.sqlite3',
+ #   },
+ #   'default': {
+ #       'ENGINE': 'django.db.backends.postgresql',
+ #       'NAME': 'cromu_db', 
+ #       'USER': 'postgres',  
+ #       'PASSWORD': '12345', 
+ #       'HOST': 'localhost',  
+ #       'PORT': '5432',  
+ #   }
 }
 
 

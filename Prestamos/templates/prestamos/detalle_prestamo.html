@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalle del Préstamo</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(to right, #e8f5f1, #ffffff);
+            padding: 30px 20px;
+            margin: 0;
+        }
+        .contenedor {
+            max-width: 850px;
+            margin: auto;
+            background: #ffffff;
+            padding: 35px 30px;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0, 153, 122, 0.1);
+        }
+        h2 {
+            text-align: center;
+            color: #007e6a;
+            margin-bottom: 25px;
+        }
+        p {
+            margin: 10px 0;
+            font-size: 16px;
+            color: #333;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 30px;
+        }
+        th, td {
+            padding: 12px;
+            text-align: center;
+            border: 1px solid #ddd;
+        }
+        th {
+            background-color: #00997a;
+            color: white;
+        }
+        tr:nth-child(even) {
+            background-color: #f4fdfc;
+        }
+        .volver {
+            text-align: center;
+            margin-top: 30px;
+        }
+        .volver a {
+            color: #00997a;
+            font-weight: bold;
+            text-decoration: none;
+        }
+        .volver a:hover {
+            text-decoration: underline;
+        }
+        .btn-agregar {
+            display: inline-block;
+            margin: 20px auto 0;
+            background-color: #00997a;
+            color: white;
+            padding: 12px 25px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+        .btn-agregar:hover {
+            background-color: #007e6a;
+        }
+        h3 {
+            margin-top: 40px;
+            color: #007e6a;
+        }
+        img {
+            margin-top: 20px;
+            max-width: 100%;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .estado-pagado {
+            color: #28a745;
+            font-weight: bold;
+        }
+        .estado-pendiente {
+            color: #c0392b;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<div class="contenedor">
+    <h2>Detalle del préstamo: {{ prestamo.descripcion }}</h2>
+
+    <p><strong>Monto:</strong> ${{ prestamo.monto }}</p>
+    <p><strong>Cuota mensual:</strong> ${{ prestamo.cuota_mensual }}</p>
+    <p><strong>Meses restantes:</strong> {{ prestamo.cantidad_meses }}</p>
+    <p><strong>Fecha de creación:</strong> {{ prestamo.fecha_creacion|date:"d/m/Y" }}</p>
+
+    <h3>Cuotas mensuales</h3>
+
+    <table>
+        <tr>
+            <th>Mes</th>
+            <th>Año</th>
+            <th>Estado</th>
+            <th>Fecha de pago</th>
+        </tr>
+        {% for cuota in cuotas %}
+        <tr>
+            <td>{{ cuota.mes }}</td>
+            <td>{{ cuota.año }}</td>
+            <td>
+                {% if cuota.pagado %}
+                    <span class="estado-pagado">Pagado</span>
+                {% else %}
+                    <span class="estado-pendiente">Pendiente</span>
+                {% endif %}
+            </td>
+            <td>{{ cuota.fecha_pago|default:"-" }}</td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="4">No hay cuotas registradas.</td></tr>
+        {% endfor %}
+    </table>
+
+    <div class="volver">
+        <a href="{% url 'vista_prestamos' %}">← Volver al resumen</a>
+    </div>
+
+    {% if user.is_superuser %}
+        <div style="text-align: center;">
+            <a href="{% url 'vista_cuota_crear' prestamo.id %}" class="btn-agregar">Registrar nueva cuota</a>
+        </div>
+    {% endif %}
+
+    {% if grafico_base64 %}
+        <h3>Gráfico de Pagos</h3>
+        <img src="data:image/png;base64,{{ grafico_base64 }}" alt="Gráfico de pagos">
+    {% else %}
+        <p style="text-align: center; margin-top: 20px;">No hay pagos suficientes para generar un gráfico.</p>
+    {% endif %}
+</div>
+
+</body>
+</html>

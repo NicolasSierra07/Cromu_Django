@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.conf import settings
+from django.utils import timezone
 import numpy as np
 
 class Prestamo(models.Model):
@@ -12,7 +13,8 @@ class Prestamo(models.Model):
     fecha_creacion = models.DateTimeField(auto_now_add=True, null=True)
 
     def save(self, *args, **kwargs):
-        if self.cantidad_meses > 0:
+        # Solo calcular cuota si el objeto es nuevo (no tiene PK aún)
+        if not self.pk and self.cantidad_meses > 0:
             self.cuota_mensual = np.round(float(self.monto) / self.cantidad_meses, 2)
         super().save(*args, **kwargs)
     
@@ -32,12 +34,16 @@ class PagoCuota(models.Model):
         return self.prestamo.cuota_mensual
 
     def save(self, *args, **kwargs):
-        if self.pk:  
+        if self.pk:
             old = PagoCuota.objects.get(pk=self.pk)
             if not old.pagado and self.pagado:
                 self.restar_mes()
+                if not self.fecha_pago:
+                    self.fecha_pago = timezone.now().date()
         elif self.pagado:
             self.restar_mes()
+            if not self.fecha_pago:
+                self.fecha_pago = timezone.now().date()
 
         super().save(*args, **kwargs)
 

@@ -12,6 +12,12 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 
 from pathlib import Path
 
+import pymysql
+pymysql.install_as_MySQLdb()
+
+LOGIN_REDIRECT_URL = 'inicio'  # Redirige después del login
+
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -57,7 +63,7 @@ ROOT_URLCONF = 'Cromu.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / "templates"],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -76,10 +82,10 @@ WSGI_APPLICATION = 'Cromu.wsgi.application'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
 DATABASES = {
- #   'default': {
- #       'ENGINE': 'django.db.backends.sqlite3',
- #       'NAME': BASE_DIR / 'db.sqlite3',
- #   },
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    },
  #   'default': {
  #       'ENGINE': 'django.db.backends.postgresql',
  #       'NAME': 'cromu_db', 
@@ -87,6 +93,14 @@ DATABASES = {
  #       'PASSWORD': '12345', 
  #       'HOST': 'localhost',  
  #       'PORT': '5432',  
+ #   }
+ #   'default': {
+ #           'ENGINE': 'django.db.backends.mysql',
+ #           'NAME': 'cromu_db',
+ #           'USER': 'root',
+ #           'PASSWORD': '12345',
+ #           'HOST': 'localhost',
+ #           'PORT': '3306',
  #   }
     
 }

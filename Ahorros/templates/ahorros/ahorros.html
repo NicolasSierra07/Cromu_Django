@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mis Ahorros</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f4f3;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #00997a;
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 28px;
+            font-weight: 600;
+        }
+
+        .contenedor {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 25px;
+            justify-content: center;
+        }
+
+        .tarjeta {
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+            padding: 25px;
+            width: 300px;
+            transition: transform 0.2s ease;
+        }
+
+        .tarjeta:hover {
+            transform: translateY(-5px);
+        }
+
+        .tarjeta h2 {
+            margin: 0 0 12px;
+            color: #007e6a;
+            font-size: 20px;
+        }
+
+        .tarjeta p {
+            margin: 6px 0;
+            font-size: 15px;
+        }
+
+        .tarjeta em {
+            font-size: 13px;
+            color: #888;
+        }
+
+        .tarjeta a {
+            display: inline-block;
+            margin-top: 12px;
+            background-color: #00997a;
+            color: white;
+            padding: 10px 16px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+
+        .tarjeta a:hover {
+            background-color: #007e6a;
+        }
+
+        .boton-crear {
+            text-align: center;
+            margin: 30px 0;
+        }
+
+        .boton-crear a {
+            background-color: #00997a;
+            color: white;
+            padding: 12px 25px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-size: 15px;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+
+        .boton-crear a:hover {
+            background-color: #007e6a;
+        }
+
+        .mensaje {
+            text-align: center;
+            font-size: 16px;
+            color: #555;
+            margin-top: 40px;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Resumen de Ahorros</h1>
+</header>
+
+<div class="contenedor">
+    {% if user.is_authenticated %}
+        {% for ahorro in ahorros %}
+            <div class="tarjeta">
+                <h2>{{ ahorro.nombre }}</h2>
+                <p><strong>Descripción:</strong> {{ ahorro.descripcion }}</p>
+                <p><strong>Monto:</strong> ${{ ahorro.monto }}</p>
+                <p><strong>Cuota mensual:</strong> ${{ ahorro.cuota_mensual }}</p>
+                <p><strong>Acumulado:</strong> ${{ ahorro.dinero_total }}</p>
+                <p><strong>Meses restantes:</strong> {{ ahorro.meses_restantes }}</p>
+                <p><em>Creado el: {{ ahorro.fecha_creacion }}</em></p>
+                <a href="{% url 'detalle_ahorro' ahorro.id %}">Ver detalle</a>
+            </div>
+        {% empty %}
+            <p class="mensaje">No tienes ahorros registrados.</p>
+        {% endfor %}
+    {% else %}
+        <p class="mensaje">Debes iniciar sesión para ver tus ahorros.</p>
+    {% endif %}
+</div>
+
+{% if user.is_superuser %}
+    <div class="boton-crear">
+        <a href="{% url 'crear_ahorro' %}">+ Crear Ahorro</a>
+    </div>
+{% endif %}
+
+</body>
+</html>

@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mis Préstamos</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(to right, #e8f5f1, #ffffff);
+            margin: 0;
+            padding: 20px;
+        }
+        header {
+            background-color: #007e6a;
+            color: white;
+            padding: 25px;
+            text-align: center;
+            border-bottom: 4px solid #00997a;
+        }
+        .contenedor {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 25px;
+            margin-top: 30px;
+        }
+        .tarjeta {
+            background: #ffffff;
+            padding: 25px;
+            width: 300px;
+            border-radius: 12px;
+            box-shadow: 0 6px 18px rgba(0, 153, 122, 0.15);
+            transition: transform 0.2s ease;
+        }
+        .tarjeta:hover {
+            transform: translateY(-5px);
+        }
+        .tarjeta h2 {
+            margin-top: 0;
+            color: #007e6a;
+            font-size: 20px;
+        }
+        .tarjeta p {
+            margin: 10px 0;
+            color: #333;
+        }
+        .tarjeta a {
+            display: inline-block;
+            margin-top: 12px;
+            color: #00997a;
+            font-weight: 600;
+            text-decoration: none;
+        }
+        .tarjeta a:hover {
+            text-decoration: underline;
+        }
+        .btn-crear {
+            display: inline-block;
+            text-align: center;
+            background-color: #00997a;
+            color: white;
+            padding: 12px 25px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+        .btn-crear:hover {
+            background-color: #007e6a;
+        }
+        .crear-wrapper {
+            text-align: center;
+            margin-top: 40px;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Resumen de Préstamos</h1>
+    </header>
+
+    <div class="contenedor">
+        {% for prestamo in prestamos %}
+            <div class="tarjeta">
+                <h2>{{ prestamo.nombre }}</h2>
+                <p><strong>Descripción:</strong> {{ prestamo.descripcion }}</p>
+                <p><strong>Monto:</strong> ${{ prestamo.monto }}</p>
+                <p><strong>Cuota mensual:</strong> ${{ prestamo.cuota_mensual }}</p>
+                <p><strong>Meses restantes:</strong> {{ prestamo.cantidad_meses }}</p>
+                <p><em>Fecha: {{ prestamo.fecha_creacion|date:"d/m/Y" }}</em></p>
+                <a href="{% url 'vista_prestamo_detalle' prestamo.id %}">Ver detalle</a>
+            </div>
+        {% empty %}
+            <p>No tienes préstamos registrados.</p>
+        {% endfor %}
+    </div>
+
+    {% if user.is_superuser %}
+        <div class="crear-wrapper">
+            <a href="{% url 'vista_prestamo_crear' %}" class="btn-crear">Crear Préstamo</a>
+        </div>
+    {% endif %}
+
+</body>
+</html>

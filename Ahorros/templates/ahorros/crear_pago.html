@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registrar Pago</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(to right, #e8f5f1, #ffffff);
+            padding: 60px 20px;
+            margin: 0;
+        }
+        .formulario {
+            max-width: 450px;
+            margin: auto;
+            background: #ffffff;
+            padding: 35px 30px;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0, 128, 96, 0.1);
+        }
+        h2 {
+            text-align: center;
+            color: #007e6a;
+            margin-bottom: 25px;
+        }
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 6px;
+            color: #333;
+        }
+        select, input[type="number"] {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 18px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 15px;
+        }
+        input[type="checkbox"] {
+            margin-right: 8px;
+        }
+        .checkbox-label {
+            font-size: 15px;
+            color: #333;
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: #00997a;
+            color: white;
+            font-weight: bold;
+            font-size: 16px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+        button:hover {
+            background-color: #007e6a;
+            transform: scale(1.03);
+        }
+        p {
+            text-align: center;
+            margin-top: 20px;
+        }
+        a {
+            color: #007e6a;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+<div class="formulario">
+    <h2>Registrar Pago para: {{ ahorro.descripcion }}</h2>
+    <form method="post">
+        {% csrf_token %}
+
+        <label for="mes">Mes:</label>
+        <select name="mes" id="mes" required>
+            {% for m in meses %}
+                <option value="{{ m }}">{{ m }}</option>
+            {% endfor %}
+        </select>
+
+        <label for="año">Año:</label>
+        <input type="number" name="año" id="año" min="2000" max="2100" value="2025" required>
+
+        <div class="checkbox-label">
+            <input type="checkbox" name="pagado" id="pagado">
+            <label for="pagado">Marcar como pagado</label>
+        </div>
+
+        <button type="submit">Guardar Pago</button>
+    </form>
+
+    <p><a href="{% url 'detalle_ahorro' ahorro.id %}">← Volver al detalle del ahorro</a></p>
+</div>
+
+</body>
+</html>

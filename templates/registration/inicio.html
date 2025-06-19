@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inicio - Panel Principal</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(to right, #d0f5ea, #ffffff);
+            text-align: center;
+            padding-top: 80px;
+            margin: 0;
+        }
+        .contenedor {
+            display: inline-block;
+            padding: 50px 40px;
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0, 128, 96, 0.1);
+            max-width: 500px;
+            width: 90%;
+        }
+        h1 {
+            color: #007e6a;
+            margin-bottom: 30px;
+        }
+        a.boton {
+            display: block;
+            margin: 20px auto;
+            padding: 14px 28px;
+            background-color: #00997a;
+            color: white;
+            text-decoration: none;
+            border: none;
+            border-radius: 8px;
+            width: 220px;
+            font-size: 16px;
+            font-weight: bold;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+        a.boton:hover {
+            background-color: #007e6a;
+            transform: scale(1.03);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="contenedor">
+        <h1>Bienvenido {{ user.username }}</h1>
+        <a class="boton" href="{% url 'ahorros_dashboard' %}">Ahorros</a>
+        <a class="boton" href="{% url 'vista_prestamos' %}">Préstamos</a>
+        <a class="boton" href="{% url 'logout' %}">Cerrar sesión</a>
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalle del Ahorro</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(to right, #e8f5f1, #ffffff);
+            margin: 0;
+            padding: 40px 20px;
+        }
+
+        .contenedor {
+            max-width: 850px;
+            margin: auto;
+            background-color: white;
+            padding: 40px 30px;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0, 153, 122, 0.1);
+        }
+
+        h2 {
+            color: #007e6a;
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        p {
+            font-size: 16px;
+            margin: 8px 0;
+            color: #333;
+        }
+
+        h3 {
+            margin-top: 40px;
+            color: #007e6a;
+            font-size: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            font-size: 15px;
+        }
+
+        th, td {
+            padding: 14px 12px;
+            border: 1px solid #ddd;
+            text-align: center;
+        }
+
+        th {
+            background-color: #00997a;
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f6f9f8;
+        }
+
+        .volver {
+            margin-top: 30px;
+            text-align: center;
+        }
+
+        .volver a {
+            color: #007e6a;
+            font-weight: bold;
+            text-decoration: none;
+            font-size: 15px;
+        }
+
+        .volver a:hover {
+            text-decoration: underline;
+        }
+
+        .btn-super {
+            display: inline-block;
+            margin: 25px auto 10px;
+            padding: 12px 20px;
+            background-color: #28a745;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-super:hover {
+            background-color: #218838;
+        }
+
+        img {
+            display: block;
+            max-width: 100%;
+            margin: 25px auto 0;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 153, 122, 0.15);
+        }
+
+        h4 {
+            text-align: center;
+            color: #00997a;
+            margin-top: 40px;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="contenedor">
+    <h2>Detalle del ahorro: {{ ahorro.descripcion }}</h2>
+
+    <p><strong>Monto:</strong> ${{ ahorro.monto }}</p>
+    <p><strong>Cuota mensual:</strong> ${{ ahorro.cuota_mensual }}</p>
+    <p><strong>Total acumulado:</strong> ${{ ahorro.dinero_total }}</p>
+    <p><strong>Meses restantes:</strong> {{ ahorro.meses_restantes }}</p>
+
+    <h3>Pagos mensuales</h3>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Mes</th>
+                <th>Año</th>
+                <th>Estado</th>
+                <th>Fecha de pago</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for pago in pagos %}
+            <tr>
+                <td>{{ pago.mes }}</td>
+                <td>{{ pago.año }}</td>
+                <td>
+                    {% if pago.pagado %}
+                        <span style="color: #28a745; font-weight: bold;">Pagado</span>
+                    {% else %}
+                        <span style="color: #dc3545; font-weight: bold;">Pendiente</span>
+                    {% endif %}
+                </td>
+                <td>{{ pago.fecha_pago|default:"-" }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="volver">
+        <a href="{% url 'ahorros_dashboard' %}">← Volver al resumen</a>
+    </div>
+
+    {% if user.is_superuser %}
+        <div style="text-align: center;">
+            <a class="btn-super" href="{% url 'crear_pago' ahorro.id %}">+ Registrar nuevo pago</a>
+        </div>
+    {% endif %}
+
+    {% if grafico_base64 %}
+        <h4>Gráfico de pagos realizados:</h4>
+        <img src="data:image/png;base64,{{ grafico_base64 }}" alt="Gráfico de pagos">
+    {% endif %}
+</div>
+
+</body>
+</html>

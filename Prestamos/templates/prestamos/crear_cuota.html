@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registrar Cuota</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(to right, #e8f5f1, #ffffff);
+            padding: 40px 20px;
+            margin: 0;
+        }
+        form {
+            max-width: 500px;
+            margin: auto;
+            background: #ffffff;
+            padding: 35px 30px;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0, 153, 122, 0.1);
+        }
+        h2 {
+            margin-bottom: 25px;
+            color: #007e6a;
+            text-align: center;
+        }
+        label {
+            font-weight: 600;
+            margin-bottom: 5px;
+            display: block;
+            color: #333;
+        }
+        input, select {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 18px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 15px;
+        }
+        input[type="checkbox"] {
+            width: auto;
+            margin-right: 10px;
+        }
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: #00997a;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 15px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+        button:hover {
+            background-color: #007e6a;
+            transform: scale(1.02);
+        }
+    </style>
+</head>
+<body>
+
+    <form method="post">
+        {% csrf_token %}
+        <h2>Crear Cuota para: {{ prestamo.descripcion }}</h2>
+
+        <label for="mes">Mes</label>
+        <select name="mes" id="mes" required>
+            {% for m in meses %}
+                <option value="{{ m }}">{{ m }}</option>
+            {% endfor %}
+        </select>
+
+        <label for="año">Año</label>
+        <input type="number" name="año" id="año" value="{{ current_year }}" required>
+
+        <label for="pagado">
+            <input type="checkbox" name="pagado" id="pagado"> Marcar como pagado
+        </label>
+
+        <button type="submit">Registrar Cuota</button>
+    </form>
+
+</body>
+</html>

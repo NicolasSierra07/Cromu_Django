@@ -12,6 +12,10 @@ import pandas as pd
 import matplotlib
 matplotlib.use('Agg')  # Usar backend para servidores
 from matplotlib import pyplot as plt
+from django.http import FileResponse
+from .pdf_utils import generar_pdf_ahorro_con_pagos
+import requests
+from django.http import JsonResponse
 
 class AhorroListCreateView(generics.ListCreateAPIView):
     serializer_class = AhorroSerializer
@@ -193,3 +197,35 @@ def grafico_pagos_ahorros(request):
     buffer.seek(0)
 
     return HttpResponse(buffer.getvalue(), content_type='image/png')
+
+##################################################################################################
+
+def descargar_pdf_ahorro(request, ahorro_id):
+    ahorro = Ahorro.objects.get(id=ahorro_id)
+    if ahorro.nombre != request.user and not request.user.is_superuser:
+        return HttpResponse("No tienes permiso para ver este PDF.", status=403)
+    pdf_file = generar_pdf_ahorro_con_pagos(ahorro)
+    return FileResponse(pdf_file, as_attachment=True, filename=f"ahorro_{ahorro.id}.pdf")
+
+#############################################################################################
+
+def obtener_estadisticas(request):
+    data = []
+
+    for ahorro in Ahorro.objects.all():
+        pagos = ahorro.pagos.all()
+        for pago in pagos:
+            if pago.pagado:
+                data.append({
+                    'usuario': ahorro.nombre.username,
+                    'mes': pago.mes,
+                    'monto': float(ahorro.cuota_mensual)
+                })
+
+    response = requests.post("http://localhost:5001/analizar/ahorros", json=data)
+
+    if response.status_code == 200:
+        estadisticas = response.json()
+        return JsonResponse(estadisticas)
+    else:
+        return JsonResponse({'error': 'Error al conectar con microservicio'}, status=500)

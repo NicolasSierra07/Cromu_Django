@@ -12,6 +12,8 @@ from matplotlib import pyplot as plt
 import matplotlib
 matplotlib.use('Agg')
 import base64
+from django.http import FileResponse
+from .pdf_utils import generar_pdf_prestamo_con_cuotas
 
 
 ###################################################################################
@@ -194,3 +196,12 @@ def grafico_pagos_prestamos(request):
     buffer.seek(0)
 
     return HttpResponse(buffer.getvalue(), content_type='image/png')
+
+###############################################################################################
+
+def descargar_pdf_prestamo(request, prestamo_id):
+    prestamo = Prestamo.objects.get(id=prestamo_id)
+    if prestamo.nombre != request.user and not request.user.is_superuser:
+        return HttpResponse("No tienes permiso para ver este PDF.", status=403)
+    pdf_file = generar_pdf_prestamo_con_cuotas(prestamo)
+    return FileResponse(pdf_file, as_attachment=True, filename=f"prestamo_{prestamo.id}.pdf")

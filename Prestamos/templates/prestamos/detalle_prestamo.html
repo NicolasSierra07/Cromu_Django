@@ -146,6 +146,15 @@
     {% else %}
         <p style="text-align: center; margin-top: 20px;">No hay pagos suficientes para generar un gráfico.</p>
     {% endif %}
+
+    <div style="text-align: center; margin-top: 20px;">
+        <a href="{% url 'descargar_pdf_prestamo' prestamo.id %}" 
+            style="background-color: #2ecc71; color: white; padding: 10px 20px; text-decoration: none; border-radius: 8px; font-weight: bold;">
+            Descargar PDF del Préstamo
+        </a>
+    </div>
+
+
 </div>
 
 </body>

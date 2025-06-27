@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import AhorroListCreateView, AhorroDetailView, PagoMensualListCreateView, PagoMensualDetailView, ahorros_dashboard, detalle_ahorro, crear_ahorro, crear_pago, grafico_pagos_ahorros
+from .views import AhorroListCreateView, AhorroDetailView, PagoMensualListCreateView, PagoMensualDetailView, ahorros_dashboard, detalle_ahorro, crear_ahorro, crear_pago, grafico_pagos_ahorros, descargar_pdf_ahorro, obtener_estadisticas
 
 urlpatterns = [
     path('ahorros/', AhorroListCreateView.as_view(), name='ahorro-list-create'),
@@ -13,4 +13,8 @@ urlpatterns = [
     path('crear/', crear_ahorro, name='crear_ahorro'),
     path('<int:ahorro_id>/pago/', crear_pago, name='crear_pago'),
     path('vista/grafico-ahorros/', grafico_pagos_ahorros, name='grafico_ahorros'),
+
+    path('ahorros/<int:ahorro_id>/pdf/', descargar_pdf_ahorro, name='descargar_pdf_ahorro'),
+
+    path('estadisticas/ahorros/', obtener_estadisticas, name='estadisticas_ahorros'),
 ]

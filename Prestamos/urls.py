@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import PrestamoListCreateView, PrestamoDetailView, PagoCuotaListCreateView, PagoCuotaDetailView, prestamos_dashboard, detalle_prestamo, crear_prestamo, crear_cuota, grafico_pagos_prestamos
+from .views import PrestamoListCreateView, PrestamoDetailView, PagoCuotaListCreateView, PagoCuotaDetailView, prestamos_dashboard, detalle_prestamo, crear_prestamo, crear_cuota, grafico_pagos_prestamos, descargar_pdf_prestamo
 
 urlpatterns = [
     path('prestamos/', PrestamoListCreateView.as_view(), name='prestamo-list-create'),
@@ -12,4 +12,6 @@ urlpatterns = [
     path('vista/prestamos/nuevo/', crear_prestamo, name='vista_prestamo_crear'),
     path('vista/prestamos/<int:prestamo_id>/cuota/', crear_cuota, name='vista_cuota_crear'),
     path('vista/grafico-prestamos/', grafico_pagos_prestamos, name='grafico_prestamos'),
+
+    path('prestamos/<int:prestamo_id>/pdf/', descargar_pdf_prestamo, name='descargar_pdf_prestamo'),
 ]
